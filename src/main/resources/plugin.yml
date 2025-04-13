@@ -1,0 +1,5 @@
+name: RCON
+main: org.powernukkitx.rcon.RCONPlugin
+version: 1.0
+author: KeksDev
+api: 2.0.0

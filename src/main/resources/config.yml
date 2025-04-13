@@ -1,0 +1,5 @@
+---
+rconAddress: 0.0.0.0
+rconPort: 1234
+rconPassword: Passw0rt
+...
