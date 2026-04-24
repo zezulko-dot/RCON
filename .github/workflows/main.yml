@@ -6,6 +6,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout
@@ -17,14 +19,23 @@ jobs:
           distribution: 'temurin'
           java-version: '8'
 
-      - name: Give permission to gradlew
-        run: chmod +x ./gradlew
-
-      - name: Build with Gradle
-        run: ./gradlew build
+      - name: Build with Gradle (wrapper or fallback)
+        run: |
+          if [ -f "./gradlew" ]; then
+            chmod +x ./gradlew
+            ./gradlew build
+          elif [ -f "build.gradle" ]; then
+            gradle build
+          elif [ -f "pom.xml" ]; then
+            mvn package
+          else
+            echo "No build system found!"
+            exit 1
+          fi
 
       - name: Upload jar
         uses: actions/upload-artifact@v4
         with:
           name: RCON
-          path: build/libs/*.jar
+          path: |
+            **/*.jar
