@@ -1,0 +1,27 @@
+name: Build RCON
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '8'
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Upload jar
+        uses: actions/upload-artifact@v3
+        with:
+          name: RCON
+          path: build/libs/*.jar
